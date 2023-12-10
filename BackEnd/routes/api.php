@@ -1,28 +1,25 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShoppingCartController;
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-});
+// Authentication Routes
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('logout', [AuthController::class, 'logout']);
+Route::post('refresh', [AuthController::class, 'refresh']);
 
+// Product Routes
+Route::get('/products', [ProductController::class, 'get_products']);
+Route::post('/products', [ProductController::class, 'add_product']);
+Route::post('/products/update/{id}', [ProductController::class, 'update_product']);
+Route::delete('/products/{id}', [ProductController::class, 'delete_product']);
 
+// Shopping Cart Routes
+Route::get('/cart', [ShoppingCartController::class, 'get_shopping_cart']);
+Route::post('/cart', [ShoppingCartController::class, 'add_shopping_cart']);
+Route::delete('/cart', [ShoppingCartController::class, 'delete_shopping_cart']);
 
-Route::controller(ProductController::class)->group(function () {
-    Route::get('/products', 'get_products');
-    Route::post('/products', 'add_product');
-    Route::post('/products/update/{id}', 'update_product');
-    Route::delete('/products/{id}', 'delete_product');
-});
-
-Route::controller(ShoppingCartController::class)->group(function () {
-    Route::get('/cart', 'get_shopping_cart');
-    Route::post('/cart', 'add_shopping_cart');
-    Route::delete('/cart', 'delete_shopping_cart');
+Route::get('login', function () {
+    abort(401, 'Unauthenticated');
 });
